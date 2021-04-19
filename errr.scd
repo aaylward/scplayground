@@ -1,21 +1,16 @@
 s.boot;
-b = Buffer.readChannel(s, "/Users/andy/sounds/kick.wav", 0, -1, channels:[0]);
-l = Buffer.readChannel(s, "/Users/andy/sounds/lineareye.wav", 0, -1, channels:[0]);
-b.play;
 
 ServerOptions.inDevices;
 Server.default.options.inDevice_("Komplete Audio 6");
 
-"Hello World!".postln;
 
 { [SinOsc.ar(200, 0, 0.2), SinOsc.ar(224, 0, 0.2)] }.play;
 { [SinOsc.ar(110, 0, 0.2), SinOsc.ar(114, 0, 0.2)] }.play;
 { [SinOsc.ar(55, 0, 0.2), SinOsc.ar(55, 0, 0.2)] }.play;
 
-// read a soundfile
-b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+// load and play a sample
+b = Buffer.readChannel(s, "/Users/andy/sounds/kick.wav", 0, -1, channels:[0]);
 
-// now play it
 (
 x = SynthDef("tutorial-PlayBuf",{ arg out = 0, bufnum;
     Out.ar( out,
@@ -25,6 +20,7 @@ x = SynthDef("tutorial-PlayBuf",{ arg out = 0, bufnum;
 )
 x.free; b.free;
 
+// play it weird
 (
 {
 	GrainBuf.ar(
@@ -44,6 +40,8 @@ x.free; b.free;
 	);
 }.play
 )
+
+l = Buffer.readChannel(s, "/Users/andy/sounds/lineareye.wav", 0, -1, channels:[0]);
 
 (
 {
