@@ -1,5 +1,6 @@
 s.boot;
-b = Buffer.readChannel(s, "/Users/andy/kick.wav", 0, -1, channels:[0]);
+b = Buffer.readChannel(s, "/Users/andy/sounds/kick.wav", 0, -1, channels:[0]);
+l = Buffer.readChannel(s, "/Users/andy/sounds/lineareye.wav", 0, -1, channels:[0]);
 b.play;
 
 ServerOptions.inDevices;
@@ -43,6 +44,28 @@ x.free; b.free;
 	);
 }.play
 )
+
+(
+{
+	GrainBuf.ar(
+		2,
+		Impulse.ar(8),
+		1/16,
+		l.bufnum,
+		4,
+		(
+			Phasor.ar(0, 0.015 * BufRateScale.ir(l), 0, BufSamples.ir(l)-1)
+			+ LFNoise1.ar(100).bipolar(0.05 * SampleRate.ir)
+		) / BufSamples.ir(l),
+		2,
+		0,
+		-1,
+		512
+	);
+}.play
+)
+
+
 
 (
 {
