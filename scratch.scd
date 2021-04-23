@@ -21,11 +21,14 @@ ServerOptions.inDevices; // input devices
 
 (
 {
-	var pitchEnv = Env([0, 1, 0.9, 0.5], [0, 0.001, 0.5, 0.5]);
+	var pitchEnv = Env([4, 0.3, 1, 0.6, 0.2], [0, 0.01, 0.15, 0.7, 1], curve: 'exp');
+	var yyyyy = Env([4, 0.3, 1, 0.6, 0.2], [0, 0.01, 0.15, 0.7, 1], curve: 'exp').plot;
 	var ampEnv = Env([0, 1, 0.5, 0], [0, 0.001, 0.5, 0.5]);
 	var filterEnv = Env([0, 0.1, 0.2, 1], [0, 0.5, 0.5, 0.5]);
 	HPF.ar(
-		Saw.ar(EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 44) * EnvGen.kr(ampEnv, doneAction: Done.freeSelf),
+		Saw.ar(
+			EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 44,
+			EnvGen.kr(ampEnv, doneAction: Done.freeSelf)),
 		EnvGen.kr(filterEnv, doneAction: Done.freeSelf) * 2000
 	)
 }.scope(1);
