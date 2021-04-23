@@ -2,7 +2,7 @@ s.boot;
 ServerOptions.inDevices; // input devices
 "open -a 'Audio MIDI Setup'".unixCmd;
 
-{Out.ar(GbmanN.ar([2300,2300]),LFSaw.ar(Pulse.ar(4,[1,2],1,LFPulse.ar(1)))+2)}.play;
+{ Out.ar(GbmanN.ar([2300,2300]),LFSaw.ar(Pulse.ar(4,[1,2],1,LFPulse.ar(1)))+2) }.play;
 { Saw.ar(XLine.kr(100,15000,6),0.2) }.scope(1);
 { Blip.ar(XLine.kr([30, 30],[550, 500],1),1,0.2) }.scope(1); // no aliasing
 { Saw.ar(XLine.kr([30, 30],0.5,1),0.5,0.2) }.scope(1); // no aliasing
@@ -14,6 +14,22 @@ ServerOptions.inDevices; // input devices
 { SinOsc.ar(SinOsc.kr([55, 55], 0, 50),0, 1) }.scope(1); // no aliasing
 
 { LPF.ar(Saw.ar([MouseX.kr(55, 2200, 1), MouseX.kr(11, 2000, 1)],1,0.2), MouseY.kr(1e2,2e4,1), 0.2) }.scope(1);
+
+{ Blip.ar([XLine.kr(550, 22, 0.345), XLine.kr(550, 22, 0.345)],1,0.2) }.scope(1);
+
+{ SinOsc.ar([XLine.kr(2600, 22, 0.1724), XLine.kr(2600, 22, 0.1724)],1,0.2) }.scope(1);
+
+(
+{
+	var pitchEnv = Env([0, 1, 0.9, 0.5], [0, 0.001, 0.5, 0.5]);
+	var ampEnv = Env([0, 1, 0.5, 0], [0, 0.001, 0.5, 0.5]);
+	var filterEnv = Env([0, 0.1, 0.2, 1], [0, 0.5, 0.5, 0.5]);
+	HPF.ar(
+		Saw.ar(EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 44) * EnvGen.kr(ampEnv, doneAction: Done.freeSelf),
+		EnvGen.kr(filterEnv, doneAction: Done.freeSelf) * 2000
+	)
+}.scope(1);
+)
 
 (
 z = {
