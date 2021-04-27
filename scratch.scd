@@ -1,5 +1,9 @@
 s.boot;
+s.quit;
 ServerOptions.inDevices;
+Server.default.options.inDevice_("Komplete Audio 6");
+Server.default.options.outDevice_("Loopback Audio");
+
 "open -a 'Audio MIDI Setup'".unixCmd;
 
 { Out.ar(GbmanN.ar([2300,2300]),LFSaw.ar(Pulse.ar(4,[1,2],1,LFPulse.ar(1)))+2) }.play;
@@ -27,7 +31,7 @@ ServerOptions.inDevices;
 	var filterEnv = Env([0, 0.1, 0.2, 1], [0, 0.5, 0.5, 0.5]);
 	HPF.ar(
 		Saw.ar(
-			EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 44,
+			[EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 1000, EnvGen.kr(pitchEnv, doneAction: Done.freeSelf) * 1000],
 			EnvGen.kr(ampEnv, doneAction: Done.freeSelf)),
 		EnvGen.kr(filterEnv, doneAction: Done.freeSelf) * 2000
 	)
@@ -48,3 +52,12 @@ z.set(\noiseHz, 16);
 z.set(\noiseHz, 8);
 
 z.free;
+
+(
+{
+	var x = SinOsc.ar(MouseX.kr(1, 100), 0, MouseY.kr(0, 1));
+	//var x = Saw.ar(MouseX.kr(1, 100), MouseY.kr(0, 1));
+	//SinOsc.ar([300 * x + 700, 300 * x + 690], 0, 0.5)
+	Saw.ar([300 * x + 700, 300 * x + 690], 0.5)
+}.scope(1);
+)
